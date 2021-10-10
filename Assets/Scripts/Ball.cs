@@ -1,0 +1,35 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Ball : MonoBehaviour
+{
+    public Text MyscoreText;
+    private int ScoreNum;
+    float speed = 7f;
+    public void start()
+    {
+        ScoreNum = 0;
+        MyscoreText.text = "Score:" + ScoreNum;
+    }
+    public void Update()
+    {
+        var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        transform.position += move * speed * Time.deltaTime;
+        if (Input.GetMouseButton(0))
+        {
+            Vector2 cursorPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+            transform.position = new Vector2(cursorPos.x, cursorPos.y);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Spawnable")
+        {
+            ScoreNum += 1;
+            Destroy(collision.gameObject);
+            MyscoreText.text = "Score: " + ScoreNum;
+        } 
+    }
+}
